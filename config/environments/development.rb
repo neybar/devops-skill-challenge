@@ -40,5 +40,5 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # White list local dev IP
-  config.web_console.whitelisted_ips = '192.168.33.1'
+  config.web_console.whitelisted_ips = ['172.17.0.0/12','192.168.33.1']
 end
