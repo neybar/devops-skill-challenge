@@ -5,10 +5,9 @@ COPY Gemfile* /tmp/
 
 RUN apk --no-cache add nodejs postgresql-dev sqlite-dev libxslt-dev tzdata \
  && apk --no-cache add --virtual build-dependencies build-base libxml2-dev ruby-dev libc-dev linux-headers openssl-dev mysql-dev \
- && gem install libv8 therubyracer \
  && bundle config build.nokogiri --use-system-libraries \
  && bundle install \
- && apk del build-dependencies build-base
+ && apk del build-dependencies
 
 RUN mkdir /app
 WORKDIR /app
