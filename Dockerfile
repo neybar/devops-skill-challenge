@@ -11,7 +11,7 @@ RUN apk --no-cache add nodejs postgresql-dev sqlite-dev libxslt-dev tzdata \
 
 RUN mkdir /app
 WORKDIR /app
-ADD . /app
+COPY . /app
 
 ENV RAILS_ENV=development
 
