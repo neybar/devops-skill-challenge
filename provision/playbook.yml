@@ -1,0 +1,64 @@
+---
+- hosts: boolio
+  remote_user: nav
+  become: true
+  vars:
+    - image_port: 5000 
+    - image_tag: "v1"
+  tasks:
+    - name: Update host
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400
+    - name:    Install prerequisites
+      apt:     name={{item}} update_cache=yes
+      with_items:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+        - nginx
+        - python-pip
+    - name:    Add Docker GPG key
+      apt_key: url=https://download.docker.com/linux/ubuntu/gpg
+    - name:    Add Docker APT repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+    - name:    Install Docker
+      apt: name=docker-ce
+    - name: Reverse Nginx proxy
+      template:
+        src: templates/proxy.conf
+        dest: /etc/nginx/sites-enabled/boolio.conf
+      notify:
+        - restart nginx
+    - name: Remove default site
+      file:
+        path: "/etc/nginx/sites-enabled/default"
+        state: absent
+      notify:
+        - restart nginx
+    - name: install certain python modules for docker
+      pip:
+        name: "docker"
+        state: present
+    - name: Boolio API
+      docker_container:
+        name: boolio
+        image: neybar/boolio:{{ image_tag }}
+        restart: yes
+        restart_policy: always
+        ports:
+          - "8080:{{ image_port }}"
+    - name: Start nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+
