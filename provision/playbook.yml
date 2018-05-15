@@ -1,6 +1,5 @@
 ---
 - hosts: boolio
-  remote_user: nav
   become: true
   vars:
     - image_port: 5000 
