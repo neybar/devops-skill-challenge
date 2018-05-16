@@ -4,6 +4,7 @@
   vars:
     - image_port: 5000 
     - image_tag: "v1.1"
+    - bool_api_url: "http://boolio.nav.engineering/booleans/"
   tasks:
     - name: Update host
       apt:
@@ -50,6 +51,8 @@
         restart_policy: always
         ports:
           - "8080:{{ image_port }}"
+        env:
+          BOOL_API_URL: "{{ bool_api_url }}"
     - name: Start nginx
       service:
         name: nginx
