@@ -3,7 +3,7 @@
   become: true
   vars:
     - image_port: 5000 
-    - image_tag: "v1"
+    - image_tag: "v1.1"
   tasks:
     - name: Update host
       apt:

@@ -15,6 +15,9 @@ COPY . /app
 
 ENV RAILS_ENV=development
 
+# This was added in a recent version, URL is unknown at this time.
+ENV BOOL_API_URL=http://localhost:5000
+
 EXPOSE 5000
 CMD ["bin/docker_entrypoint.sh"]
 
